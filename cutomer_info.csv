@@ -1,0 +1,10 @@
+CustName,CustID,AcOpeningDate,JointHolderName,Address,City,PinCode,State,Country,ResTelNo,MobilNo,Occupation,AcType,AcNo
+Babu,665368,19991230,naseem,jarimari,mumbai,400049,Maharashtra,India,5050505050,7070707070,Doctor,Fixed,454472269254763
+Alim,851758,2000\12\30,salman,tilaknagar,mumbai,453827,Maharashtra,India,8695869525,8695869525,Student,Saving,916082068690696
+Mahafuze,281232,20000\12\30,naseem,ghatkopar,mumbai,400078,Maharashtra,India,2342342343,4564564565,House wifi,Saving,404365806525416
+lala,406606,2000\12\30,naseem,Sakinaka,mumbai,500029,Maharashtra,India,3453453454,9879879878,other,Saving,450194451389224
+sakila,236553,2000\12\31,naseem,ghatkopar,mumbai,400012,maharashtra,india,4040404040,1010101010,House wifi,Saving,804552960605860
+Afsar khan,978292,1999\12\3,lala,kurla,mumbai,400058,maharashtra,india,1231231232,4564564565,other,Saving,137770285682072
+mustakim khan,295724,2000\12\30,samim,ghatkopar,mumbai,300023,maharashtra,india,1231231232,8768767888,Businessman,Fixed,134407220719828
+Irfan khan,553405,2001\4\12,Salman khan,"Kamani,kurka",Mumbai,400087,Maharashtra,India,0987654321,1234567890,Doctor,Saving,132536835119004
+Akaram khan,852049,1999\12\30,naseem,"kurla, kamani, sakinaka",mumbai,400023,Maharashtra,India,5656565656,7878787878,Businessman,Saving,261318230368659
