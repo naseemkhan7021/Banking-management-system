@@ -5,7 +5,7 @@ import random
 import pymysql
 import pandas as pd
 from csv import DictWriter
-
+# import import pdb
 
 
 
@@ -16,13 +16,64 @@ def append_dict_as_row(file_name, dict_of_elem, field_names):       #to creat th
         dict_writer = DictWriter(write_obj, fieldnames=field_names)
         # Add dictionary as wor in the csv
         dict_writer.writerow(dict_of_elem)
-dic={}
+
+
+def createDatabase():
+    conn = pymysql.connect(
+        host='localhost',
+        user='root',
+        password=''
+    )
+
+    if conn:
+        try:
+            cors = conn.cursor()
+            value = cors.execute("CREATE DATABASE IF NOT EXISTS banck_database;")
+            if value == False:
+                print("Data server is Thare !! \n Please check Database servar The database exit or any problame")
+
+            else:
+                if value == True:
+                    try:
+                        conn = pymysql.connect(
+                            host='localhost',
+                            user='root',
+                            password='',
+                            database='banck_database'
+                        )
+                        query = """CREATE TABLE IF NOT EXISTS customers (CustName VARCHAR(255), CustID INT(10),AcOpeningDate DATE,JointHolderName VARCHAR(20),Address VARCHAR(50),City VARCHAR(50),PinCode VARCHAR(50),State VARCHAR(50),Country VARCHAR(50),ResTelNo VARCHAR(50),MobilNo VARCHAR(50),Occupation VARCHAR(50),AcType VARCHAR(50),AcNo INT(20)
+                        )"""
+                        cors = conn.cursor()
+                        cors.execute(query)
+                        conn.commit()
+                        print('successfully ...')
+                    
+                    except Exception as b:
+                        conn = pymysql.connect(
+                            host='localhost',
+                            user='root',
+                            password=''
+                        )
+                        cors = conn.cursor()
+                        value = cors.execute("DROP DATABASE banck_database;")
+                        # value = cors.execute("DROP DATABASE datak_com;")
+                        conn.commit()
+                        print(f'erro is {b}')
+                        # messagebox.showinfo("Alert","Your database is deleted becouse table is not currect !!! \n(please check database.)")
+                        messagebox.showwarning("Alert","Your database is deleted becouse table is not currect !!! \n(please check database.)")
+        except Exception:
+            pass
+
+
+
+createDatabase()
+
 def submit1():
     try:
         #connect to the database
 
         connection = pymysql.connect(host='localhost',user='root',
-                                        password='',database='bank_database'
+                                        password='',database='banck_database'
                                     )
 
         #connect() inbuilt function of pymysql library
@@ -86,6 +137,7 @@ def submit1():
             print(dic)  # print only one row data
 
             messagebox.showinfo("Alert","The Record is successfully inserted !!! \n (ThanYou for opening account)")
+
             cutname_E.delete(0, END)
             Acdate_E.delete(0, END)
             Nomini_E.delete(0, END)
@@ -100,8 +152,8 @@ def submit1():
             messagebox.showinfo("Error","Mobile or Telphone No. is error !!! \n (Please Enter 10 digits No.)")
             mobile_E.delete(0, END)
             TelNo_E.delete(0, END)
-    except Exception:
-        print("sumthing is wrong")
+    except Exception as e:
+        print(f"sumthing is wrong{e}")
 
 def showcutom_dedails():   # using pandas to read .csv file login fungtion
     data=pd.read_csv(r'C:\\Users\\User\AppData\\Local\\Programs\\Python\\Python38-32\\Itvedant_project\\login.csv')
@@ -109,7 +161,7 @@ def showcutom_dedails():   # using pandas to read .csv file login fungtion
     uid=username_login_entry.get()
     p=password__login_entry.get()
     if(uid=="" and p==""):
-        messagebox.showinfo("Fetch Employee","ID and password are compulsory for fetch")
+        messagebox.showerror("Fetch Employee","ID and password are compulsory for fetch")
     
     elif uid not in data['userid'].values and p not in data['password'].values:
         messagebox.showinfo("login error","Incorrect ID and password !!!")
@@ -122,13 +174,14 @@ def showcutom_dedails():   # using pandas to read .csv file login fungtion
         print(customfile)
         username_login_entry.delete(0,END)
         password__login_entry.delete(0,END)
+        login_screen.destroy()
 
 def searchrecord():
     #connect to the database
 
     connection = pymysql.connect(host='localhost',
                                     user='root',password='',
-                                    database='bank_database'
+                                    database='banck_database'
                                 )
     #connect() inbuilt function of pymysql library
     #connection user defined object
@@ -145,7 +198,7 @@ def searchrecord():
     print('Total number of rows in customers is : ', cursor.rowcount)
     for row in records:
         print("Cutomer name         : ",row[0])
-        print("Cutomer Id           :",row[1])
+        print("Cutomer Id           : ",row[1])
         print("Accoutn opening date : ",row[2])
         print("Joint holder name    : ",row[3])
         print("Address              : ",row[4])
@@ -172,7 +225,7 @@ def customTransection():
 
         connection = pymysql.connect(host='localhost',user='root'
                                         ,password='',
-                                        database='bank_database'
+                                        database='banck_database'
                                     )
 
         #connect() inbuilt function of pymysql library
@@ -332,9 +385,13 @@ while yn=='y':
             Occupt.grid(row=6,column=3)
             Occupt.current(1)
 
-            #Button
-            subBottun1=Button(wd,text="Submit",command=submit1,borderwidth=4,bg='spring green',font="Times 12 bold",relief=RAISED,height=1,width=12)
-            subBottun1.grid(row=8,column=1,columnspan=4)
+            #Button submit
+            subBottun1=Button(wd,text="Submit",command=submit1,borderwidth=4,bg='spring green',fg='white', font="Times 12 bold",relief=RAISED,height=1,width=12)
+            subBottun1.grid(row=8,column=1,columnspan=1)
+
+            #Button close
+            closB1=Button(wd,text="Close",command=wd.destroy,borderwidth=4,bg='red',fg='white', font="Times 12 bold",relief=RAISED,height=1,width=10)
+            closB1.grid(row=8,column=2,columnspan=1)
 
 
 
@@ -367,7 +424,11 @@ while yn=='y':
 
             # submit Button
             subBottun2=Button(wd1,text="Submit",command=searchrecord,borderwidth=4,bg='spring green',font="Times 12 bold",relief=RAISED,height=1,width=12)
-            subBottun2.grid(row=3,column=1,columnspan=4)
+            subBottun2.grid(row=3,column=1)
+
+            #Button close
+            closB2=Button(wd1,text="Close",command=wd1.destroy,borderwidth=4,bg='red',font="Times 12 bold",relief=RAISED,height=1,width=10)
+            closB2.grid(row=3,column=2)
 
 
             wd1.mainloop()
@@ -420,10 +481,11 @@ while yn=='y':
 
             # submit Button
             subBottun3=Button(wd2,text="Submit",command=customTransection,borderwidth=4,bg='spring green',font="Times 12 bold",relief=RAISED,height=1,width=12)
-            subBottun3.grid(row=4,column=1,columnspan=4)
+            subBottun3.grid(row=4,column=1,columnspan=2)
 
-
-
+            #Button close
+            closB3=Button(wd2,text="Close",command=wd2.destroy,borderwidth=4,bg='red',font="Times 12 bold",relief=RAISED,height=1,width=10)
+            closB3.grid(row=4,column=2,padx=2,columnspan=2)
             wd2.mainloop()
 
 
@@ -476,9 +538,11 @@ while yn=='y':
 
             # submit Button
             subBottun4=Button(wd3,text="Submit",command=customTransection,borderwidth=4,bg='spring green',font="Times 12 bold",relief=RAISED,height=1,width=12)
-            subBottun4.grid(row=4,column=1,columnspan=4)
+            subBottun4.grid(row=4,column=1,columnspan=2)
 
-
+            #Button close
+            closB3=Button(wd3,text="Close",command=wd3.destroy,borderwidth=4,bg='red',font="Times 12 bold",relief=RAISED,height=1,width=10)
+            closB3.grid(row=4,column=2,padx=2,columnspan=2)
 
             wd3.mainloop()
 
@@ -500,7 +564,9 @@ while yn=='y':
             password__login_entry.grid(row=2,column=1,padx=10,pady=10)
             Button(login_screen, text="Login", width=20,height=1,command=showcutom_dedails,bg='spring green',borderwidth=3,font="Times 10 bold",relief=RAISED).grid(row=3,column=1,columnspan=2)
         
-            
+            #Button close
+            Button(login_screen,text="Close",command=login_screen.destroy,borderwidth=3,bg='red',font="Times 10 bold",relief=RAISED).grid(row=4,column=1,padx=5,pady=2,columnspan=2)
+
             login_screen.mainloop()
             
 
@@ -519,5 +585,3 @@ else:
     
 
     messagebox.showinfo('Thanck','Ok, Thanck for using program    !!!!!')
-
-
